@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dljs4</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Teko";
+    background-color: rgb(213, 227, 255);
+}
+
+.clock-style {
+    width: 400px;
+    height: 300px;
+    margin: 150px auto 20px;
+    border-radius: 50px;
+    background: linear-gradient(rgb(255,222,125), rgba(137,229,107,.4), rgb(107,176,229));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#time {
+    width: 380px;
+    height: 280px;
+    border-radius: 50px;
+    background: rgba(237,248,248,.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 58px;
+    letter-spacing: 10px;
+    color: rgb(16,64,111);
+}
+
+.box-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+button {
+    outline: none;
+    border: none;
+}
+
+.btn-start {
+    background: rgb(25,115,25); 
+    width: 100px;
+    height: 50px;
+    border-radius: 20px;
+    font-size: 23px;
+    color: white;
+    cursor: pointer;
+    }
+.btn-stop  {
+    background: rgb(121,19,39); 
+    width: 100px;
+    height: 50px;
+    border-radius: 20px;
+    font-size: 23px;
+    color: white;
+    cursor: pointer;
+    }
+.btn-reset {
+    background: rgb(25,43,115); 
+    width: 100px;
+    height: 50px;
+    border-radius: 20px;
+    font-size: 23px;
+    color: white;
+    cursor: pointer;
+    }
+
+.box-item {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.input-box {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    outline: none;
+    border: none;
+    width: 100px;
+    height: 50px;
+    border-radius: 5px;
+    font-size: 23px;
+    background-color:  rgb(255, 254, 249);
+    box-shadow: inset 0 4px 7px rgb(248, 230, 175);
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="clock-style">
+    <div id="time">00:00:00:00</div>
+</div>
+
+<div class="box-item">
+    <input type="number" id="h" placeholder="HH" min="0">
+    <input type="number" id="m" placeholder="MM" min="0" max="59">
+    <input type="number" id="s" placeholder="SS" min="0" max="59">
+</div>
+
+<div class="box-wrapper">
+    <button class="btn-start" onclick="start()">Đếm giờ</button>
+    <button class="btn-stop" onclick="stop()">Tạm dừng</button>
+    <button class="btn-reset" onclick="reset()">Đặt lại</button>
+</div>
+
+<script>
+let gio = 0, phut = 0, giay = 0, mili = 0;
+let timer = null;
+
+function updateDisplay() {
+    let h  = gio  < 10 ? "0" + gio  : gio;
+    let m  = phut < 10 ? "0" + phut : phut;
+    let s  = giay < 10 ? "0" + giay : giay;
+    let ms = mili < 10 ? "0" + mili : mili;
+    time.textContent = `${h}:${m}:${s}:${ms}`;
+}
+
+function countdown() {
+    if (gio === 0 && phut === 0 && giay === 0 && mili === 0) {
+        stop();
+        alert("Hết giờ gòi ấy oiiiii:>>>>!");
+        return;
+    }
+
+    mili--;
+    if (mili < 0) {
+        mili = 99;
+        giay--;
+    }
+
+    if (giay < 0) {
+        giay = 59;
+        phut--;
+    }
+
+    if (phut < 0) {
+        phut = 59;
+        gio--;
+    }
+
+    updateDisplay();
+}
+
+function start() {
+    if (!timer) {
+        if (gio === 0 && phut === 0 && giay === 0) {
+            gio  = +h.value || 0;
+            phut = +m.value || 0;
+            giay = +s.value || 0;
+            mili = 99;
+            updateDisplay();
+        }
+        timer = setInterval(countdown, 10);
+    }
+}
+
+function stop() {
+    clearInterval(timer);
+    timer = null;
+}
+
+function reset() {
+    stop();
+    gio = phut = giay = mili = 0;
+    updateDisplay();
+}
+</script>
+
+</body>
+</html>
